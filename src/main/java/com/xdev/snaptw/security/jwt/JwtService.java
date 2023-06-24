@@ -2,6 +2,7 @@ package com.xdev.snaptw.security.jwt;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
@@ -60,7 +61,7 @@ public class JwtService {
     }
 
     public String generateToken(UserDetails userDetails){
-        return generateToken(null, userDetails);
+        return generateToken(new HashMap<>(), userDetails);
     }
 
     public String generateToken(Map<String,Object> claims, UserDetails userDetails){

@@ -37,4 +37,8 @@ public class UserController {
     public ResponseEntity<UserDTO> getUserByEmail(@PathVariable String email){
         return ResponseEntity.ok(service.getUserByEmail(email));
     }
+    @GetMapping("/me")
+    public ResponseEntity<UserDTO> getUserInfo(){
+        return ResponseEntity.ok(service.getCurrentUser());
+    }
 }

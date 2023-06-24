@@ -14,8 +14,6 @@ import com.xdev.snaptw.apiresponse.TokenResponse;
 import com.xdev.snaptw.user.User;
 import com.xdev.snaptw.util.Const;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -32,8 +30,8 @@ public class AuthenticationController {
     }
 
     @GetMapping("/login")
-    public ResponseEntity<TokenResponse> login(@RequestBody AuthenticationRequest request, HttpServletRequest req) throws ServletException{
+    public ResponseEntity<TokenResponse> login(@RequestBody AuthenticationRequest request){
         return ResponseEntity
-            .ok(service.authenticate(request,req));
+            .ok(service.authenticate(request));
     }
 }

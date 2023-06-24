@@ -1,7 +1,5 @@
 package com.xdev.snaptw.auth;
 
-import java.util.Map;
-
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,10 +11,8 @@ import com.xdev.snaptw.apiresponse.TokenResponse;
 import com.xdev.snaptw.security.jwt.JwtService;
 import com.xdev.snaptw.user.User;
 import com.xdev.snaptw.user.UserDAO;
-import com.xdev.snaptw.user.UserDTO;
 
 import jakarta.persistence.EntityExistsException;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -41,20 +37,19 @@ public class AuthenticationService {
 
     }
 
-    public TokenResponse authenticate(AuthenticationRequest request, HttpServletRequest req){
+    public TokenResponse authenticate(AuthenticationRequest request){
         String username = request.username();
         String password = request.password();
-        authManager.authenticate(
-            new UsernamePasswordAuthenticationToken(username,password)
-        );
-        
-        User user = userDAO.findUserByUsername(username).get();
-        UserDTO userDTO = new UserDTO(user);
-
-        Map<String,Object> claims = Map.of("user", userDTO);
-
-        String token = jwtService.generateToken(claims, user);
-
+        UsernamePasswordAuthenticationToken authToken = 
+            new UsernamePasswordAuthenticationToken(
+                username, 
+                password
+            );
+        User user = (User) authManager
+                            .authenticate(authToken)
+                            .getPrincipal();
+         
+        String token = jwtService.generateToken(user);
 
         return new TokenResponse(token);
     }
