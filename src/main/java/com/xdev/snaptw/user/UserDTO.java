@@ -8,4 +8,8 @@ public record UserDTO(
     String lastName,
     String email,
     String username
-){}
+){
+    public UserDTO(User u){
+        this(u.getName(), u.getLastName(), u.getEmail(), u.getUsername());
+    }
+}

@@ -18,44 +18,35 @@ public class UserServiceImpl implements UserService{
     public List<UserDTO> getAllUsers() {
         return dao.findAll()
             .stream()
-            .map(this::userDTOSupplier)
+            .map(UserDTO::new)
             .toList();
     }
 
     @Override
     public UserDTO getUserById(Long id) {
         return dao.findById(id)
-            .map(this::userDTOSupplier)
-            .orElseThrow(()-> new ResourceNotFoundException(
-                "Couldn't find any user with id: "+id
-            ));
+                .map(UserDTO::new)
+                .orElseThrow(()-> new ResourceNotFoundException(
+                    "Couldn't find any user with id: "+id
+                ));
     }
 
     @Override
     public UserDTO getUserByUsername(String username) {
         return dao.findUserByUsername(username)
-            .map(this::userDTOSupplier)
-            .orElseThrow(()->new ResourceNotFoundException(
-                "Couldn't find any user with username: "+username
-            ));
+                .map(UserDTO::new)
+                .orElseThrow(()->new ResourceNotFoundException(
+                    "Couldn't find any user with username: "+username
+                ));
     }
 
     @Override
     public UserDTO getUserByEmail(String email) {
         return dao.findUserByEmail(email)
-            .map(this::userDTOSupplier)
-            .orElseThrow(()-> new ResourceNotFoundException(
-                "Couldn't find any user with email: "+email
-            ));
-    }
-
-    private UserDTO userDTOSupplier(User u){
-        return UserDTO.builder()
-                .name(u.getName())
-                .lastName(u.getLastName())
-                .email(u.getEmail())
-                .username(u.getUsername())
-                .build();
+                .map(UserDTO::new)
+                .orElseThrow(()-> new ResourceNotFoundException(
+                    "Couldn't find any user with email: "+email
+                ));
     }
     
 }
