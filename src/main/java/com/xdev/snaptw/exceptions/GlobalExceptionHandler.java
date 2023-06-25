@@ -2,6 +2,7 @@ package com.xdev.snaptw.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -43,6 +44,16 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MalformedJwtException.class)
     public ResponseEntity<Response> malformedToken(MalformedJwtException e){
         return getResponse(HttpStatus.BAD_REQUEST, e);
+    }
+
+    @ExceptionHandler(InvalidJwtSubjectException.class)
+    public ResponseEntity<Response> notValidJwtSubject(InvalidJwtSubjectException e){
+        return getResponse(HttpStatus.UNAUTHORIZED, e);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<Response> accessDenied(AccessDeniedException e){
+        return getResponse(HttpStatus.UNAUTHORIZED, e);
     }
 
     @ExceptionHandler(RuntimeException.class)

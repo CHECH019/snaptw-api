@@ -8,10 +8,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.xdev.snaptw.exceptions.InvalidJwtSubjectException;
 import com.xdev.snaptw.exceptions.NoTokenProvidedException;
 import com.xdev.snaptw.util.Const;
 
@@ -47,19 +49,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
         final String jwt = getJwt(request);
         final String username = getUsername(jwt);
 
-        if(contextHolderHasNoAuthentication()){
+        try{
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-
-            if(jwtService.isJwtValid(jwt,userDetails)){
-                UsernamePasswordAuthenticationToken authToken = getAuthToken(userDetails, request);
-                SecurityContextHolder.getContext().setAuthentication(authToken);
-            }
+            UsernamePasswordAuthenticationToken authToken = getAuthToken(userDetails, request);
+            SecurityContextHolder.getContext().setAuthentication(authToken);
+        }catch(UsernameNotFoundException e){
+            throw new InvalidJwtSubjectException("Token's subject doesn't match any user");
         }
-        filterChain.doFilter(request, response);
-    }
 
-    private boolean contextHolderHasNoAuthentication() {
-        return SecurityContextHolder.getContext().getAuthentication() == null;
+        filterChain.doFilter(request, response);
     }
 
     private UsernamePasswordAuthenticationToken getAuthToken(

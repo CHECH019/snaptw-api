@@ -7,11 +7,14 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import com.xdev.snaptw.exceptions.ResourceNotFoundException;
 import com.xdev.snaptw.user.UserDAO;
+import com.xdev.snaptw.util.Const;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,13 +27,13 @@ public class ApplicationConfig {
     @Bean
     UserDetailsService userDetailsService(){
         return username -> dao.findUserByUsername(username)
-                            .orElseThrow(()-> new ResourceNotFoundException(
+                            .orElseThrow(()-> new UsernameNotFoundException(
                                 "The user with username: "+username+"doesn't exist")
                             );
     }
     
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
 
@@ -47,4 +50,15 @@ public class ApplicationConfig {
         return config.getAuthenticationManager();
     }
 
+    @Bean
+    WebMvcConfigurer corsConfigurer(){
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping(Const.BASE_URL+"/**")
+                        .allowedOrigins("*")
+                        .allowedMethods("*");
+            }
+        };
+    }
 }

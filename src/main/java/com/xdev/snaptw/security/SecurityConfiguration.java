@@ -3,6 +3,7 @@ package com.xdev.snaptw.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
@@ -18,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
 public class SecurityConfiguration {
 
@@ -26,12 +28,12 @@ public class SecurityConfiguration {
     private final ExceptionHandlerFilter exceptionHandlerFilter;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
+    SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
         httpSecurity
                 .csrf(CsrfConfigurer<HttpSecurity>::disable)
                 .authorizeHttpRequests(
                     authorizeHttpRequests -> authorizeHttpRequests
-                            .requestMatchers(Const.BASE_URL+"/auth/**")
+                            .requestMatchers(Const.ENDPOINTS_WHITE_LIST)
                             .permitAll()
                             .anyRequest()
                             .authenticated())

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.xdev.snaptw.apirequest.AuthenticationRequest;
 import com.xdev.snaptw.apiresponse.Response;
 import com.xdev.snaptw.apiresponse.TokenResponse;
+import com.xdev.snaptw.role.Role;
 import com.xdev.snaptw.security.jwt.JwtService;
 import com.xdev.snaptw.user.User;
 import com.xdev.snaptw.user.UserDAO;
@@ -32,6 +33,7 @@ public class AuthenticationService {
         }
         User user = u;
         user.setPassword(encoder.encode(u.getPassword()));
+        u.setRole(Role.USER);
         userDAO.save(u);
         return new Response("User created succesfully");
 
