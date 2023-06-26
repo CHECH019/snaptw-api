@@ -14,7 +14,7 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.xdev.snaptw.user.UserDAO;
-import com.xdev.snaptw.util.Const;
+import static com.xdev.snaptw.util.Const.BASE_URL;
 
 import lombok.RequiredArgsConstructor;
 
@@ -55,7 +55,7 @@ public class ApplicationConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping(Const.BASE_URL+"/**")
+                registry.addMapping(BASE_URL+"/**")
                         .allowedOrigins("*")
                         .allowedMethods("*");
             }

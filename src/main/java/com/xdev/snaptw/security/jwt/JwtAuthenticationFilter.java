@@ -15,7 +15,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.xdev.snaptw.exceptions.InvalidJwtSubjectException;
 import com.xdev.snaptw.exceptions.NoTokenProvidedException;
-import com.xdev.snaptw.util.Const;
+import static com.xdev.snaptw.util.Const.BASE_URL;
 
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
@@ -39,7 +39,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
     )throws ServletException, IOException {
 
         final String requestURI = request.getRequestURI()
-                                    .replaceAll(Const.BASE_URL, "");
+                                    .replaceAll(BASE_URL, "");
 
         if(isAuthenticationNonRequired(requestURI)){
             filterChain.doFilter(request, response);

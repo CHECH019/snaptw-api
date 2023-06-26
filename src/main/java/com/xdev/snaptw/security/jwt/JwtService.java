@@ -10,7 +10,8 @@ import java.util.function.Function;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import com.xdev.snaptw.util.Const;
+import static com.xdev.snaptw.util.Const.TOKEN_VALIDITY;
+import static com.xdev.snaptw.util.Const.SIGNING_KEY;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -70,13 +71,13 @@ public class JwtService {
                 .setClaims(claims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis()+Const.TOKEN_VALIDITY))
+                .setExpiration(new Date(System.currentTimeMillis()+TOKEN_VALIDITY))
                 .signWith(signingKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
     public Key signingKey(){
-        byte[] keyBytes = Decoders.BASE64.decode(Const.SIGNING_KEY);
+        byte[] keyBytes = Decoders.BASE64.decode(SIGNING_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 

@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.xdev.snaptw.util.Const;
+import static com.xdev.snaptw.util.Const.BASE_URL;
 
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(Const.BASE_URL+"/users")
+@RequestMapping(BASE_URL+"/users")
 public class UserController {
     private final UserService service;
 

@@ -13,13 +13,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.xdev.snaptw.security.jwt.ExceptionHandlerFilter;
 import com.xdev.snaptw.security.jwt.JwtAuthenticationFilter;
-import com.xdev.snaptw.util.Const;
+import static com.xdev.snaptw.util.Const.ENDPOINTS_WHITE_LIST;
 
 import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity(prePostEnabled = true)
+@EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfiguration {
 
@@ -33,7 +33,7 @@ public class SecurityConfiguration {
                 .csrf(CsrfConfigurer<HttpSecurity>::disable)
                 .authorizeHttpRequests(
                     authorizeHttpRequests -> authorizeHttpRequests
-                            .requestMatchers(Const.ENDPOINTS_WHITE_LIST)
+                            .requestMatchers(ENDPOINTS_WHITE_LIST)
                             .permitAll()
                             .anyRequest()
                             .authenticated())

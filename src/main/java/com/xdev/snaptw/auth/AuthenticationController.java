@@ -12,12 +12,12 @@ import com.xdev.snaptw.apirequest.AuthenticationRequest;
 import com.xdev.snaptw.apiresponse.Response;
 import com.xdev.snaptw.apiresponse.TokenResponse;
 import com.xdev.snaptw.user.User;
-import com.xdev.snaptw.util.Const;
+import static com.xdev.snaptw.util.Const.BASE_URL;
 
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping(Const.BASE_URL+"/auth")
+@RequestMapping(BASE_URL+"/auth")
 @RequiredArgsConstructor
 public class AuthenticationController {
     private final AuthenticationService service;
