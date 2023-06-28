@@ -2,7 +2,6 @@ package com.xdev.snaptw.auth;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,7 +28,7 @@ public class AuthenticationController {
             .body(service.register(u));
     }
 
-    @GetMapping("/login")
+    @PostMapping("/login")
     public ResponseEntity<TokenResponse> login(@RequestBody AuthenticationRequest request){
         return ResponseEntity
             .ok(service.authenticate(request));
