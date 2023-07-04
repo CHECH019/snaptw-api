@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.xdev.snaptw.apirequest.AuthenticationRequest;
+import com.xdev.snaptw.apirequest.RegisterRequest;
 import com.xdev.snaptw.apiresponse.Response;
 import com.xdev.snaptw.apiresponse.TokenResponse;
-import com.xdev.snaptw.user.User;
 import static com.xdev.snaptw.util.Const.BASE_URL;
 
 import lombok.RequiredArgsConstructor;
@@ -22,15 +22,16 @@ public class AuthenticationController {
     private final AuthenticationService service;
     
     @PostMapping("/signup")
-    public ResponseEntity<Response> register(@RequestBody User u){
+    public ResponseEntity<Response> register(@RequestBody RegisterRequest u){
+        var response = service.register(u);
         return ResponseEntity
             .status(HttpStatus.CREATED)
-            .body(service.register(u));
+            .body(response);
     }
 
     @PostMapping("/login")
     public ResponseEntity<TokenResponse> login(@RequestBody AuthenticationRequest request){
-        return ResponseEntity
-            .ok(service.authenticate(request));
+        var response = service.authenticate(request);
+        return ResponseEntity.ok(response);
     }
 }

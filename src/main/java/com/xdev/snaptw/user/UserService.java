@@ -47,7 +47,7 @@ public class UserService{
     }
 
     public UserDTO getCurrentUser() {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        final var user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return new UserDTO(user);
     }
     

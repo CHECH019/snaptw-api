@@ -27,23 +27,27 @@ public class UserController {
 
     @GetMapping("/username/{username}")
     public ResponseEntity<UserDTO> getUserByUsername(@PathVariable String username){
-        return ResponseEntity.ok(service.getUserByUsername(username));
+        final var userDTO = service.getUserByUsername(username);
+        return ResponseEntity.ok(userDTO);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> getUserById(@PathVariable Long id){
-        return ResponseEntity.ok(service.getUserById(id));
+        final var userDTO = service.getUserById(id);
+        return ResponseEntity.ok(userDTO);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/email/{email}")
     public ResponseEntity<UserDTO> getUserByEmail(@PathVariable String email){
-        return ResponseEntity.ok(service.getUserByEmail(email));
+        final var userDTO = service.getUserByEmail(email);
+        return ResponseEntity.ok(userDTO);
     }
 
     @GetMapping("/me")
     public ResponseEntity<UserDTO> getUserInfo(){
-        return ResponseEntity.ok(service.getCurrentUser());
+        final var userDTO = service.getCurrentUser();
+        return ResponseEntity.ok(userDTO);
     }
 }

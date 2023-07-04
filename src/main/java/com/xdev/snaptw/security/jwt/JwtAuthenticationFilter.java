@@ -38,7 +38,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
         FilterChain filterChain
     )throws ServletException, IOException {
 
-        final String requestURI = request.getRequestURI()
+        final var requestURI = request.getRequestURI()
                                     .replaceAll(BASE_URL, "");
 
         if(isAuthenticationNonRequired(requestURI)){
@@ -46,12 +46,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
             return;
         }
 
-        final String jwt = getJwt(request);
-        final String username = getUsername(jwt);
+        final var jwt = getJwt(request);
+        final var username = getUsername(jwt);
 
         try{
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-            UsernamePasswordAuthenticationToken authToken = getAuthToken(userDetails, request);
+            final var userDetails = userDetailsService.loadUserByUsername(username);
+            final var authToken = getAuthToken(userDetails, request);
             SecurityContextHolder.getContext().setAuthentication(authToken);
         }catch(UsernameNotFoundException e){
             throw new InvalidJwtSubjectException("Token's subject doesn't match any user");

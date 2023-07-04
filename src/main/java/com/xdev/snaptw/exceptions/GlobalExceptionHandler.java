@@ -56,6 +56,11 @@ public class GlobalExceptionHandler {
         return getResponse(HttpStatus.UNAUTHORIZED, e);
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Response> invalidArguments(IllegalArgumentException e){
+        return getResponse(HttpStatus.BAD_REQUEST, e);
+    }
+
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<Response> defaultException(RuntimeException e){
         return ResponseEntity
