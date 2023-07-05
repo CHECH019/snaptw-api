@@ -10,10 +10,14 @@ import org.springframework.security.config.annotation.web.configurers.CsrfConfig
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.xdev.snaptw.security.jwt.ExceptionHandlerFilter;
 import com.xdev.snaptw.security.jwt.JwtAuthenticationFilter;
 import static com.xdev.snaptw.util.Const.ENDPOINTS_WHITE_LIST;
+import static org.springframework.security.config.Customizer.withDefaults;
 
 import lombok.RequiredArgsConstructor;
 
@@ -31,6 +35,7 @@ public class SecurityConfiguration {
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
         httpSecurity
                 .csrf(CsrfConfigurer<HttpSecurity>::disable)
+                .cors(withDefaults())
                 .authorizeHttpRequests(
                     authorizeHttpRequests -> authorizeHttpRequests
                             .requestMatchers(ENDPOINTS_WHITE_LIST)
@@ -47,5 +52,16 @@ public class SecurityConfiguration {
                     exceptionHandlerFilter,
                      JwtAuthenticationFilter.class);
         return httpSecurity.build();
+    }
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.addAllowedOrigin("*");
+        configuration.addAllowedMethod("*");
+        configuration.addAllowedHeader("*");
+        
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 }   

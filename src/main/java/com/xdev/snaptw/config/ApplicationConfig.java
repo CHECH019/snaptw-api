@@ -10,11 +10,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.xdev.snaptw.user.UserDAO;
-import static com.xdev.snaptw.util.Const.BASE_URL;
 
 import lombok.RequiredArgsConstructor;
 
@@ -48,17 +45,5 @@ public class ApplicationConfig {
     @Bean
     AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception{
         return config.getAuthenticationManager();
-    }
-
-    @Bean
-    WebMvcConfigurer corsConfigurer(){
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping(BASE_URL+"/**")
-                        .allowedOrigins("*")
-                        .allowedMethods("*");
-            }
-        };
     }
 }

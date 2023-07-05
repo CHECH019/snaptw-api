@@ -38,14 +38,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
         FilterChain filterChain
     )throws ServletException, IOException {
 
-        final var requestURI = request.getRequestURI()
-                                    .replaceAll(BASE_URL, "");
-
-        if(isAuthenticationNonRequired(requestURI)){
+        if(isAuthenticationNonRequired(request)){
             filterChain.doFilter(request, response);
             return;
         }
-
         final var jwt = getJwt(request);
         final var username = getUsername(jwt);
 
@@ -90,8 +86,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
                         "Token provided has no subject"));
     }
 
-    boolean isAuthenticationNonRequired(String uri){
-        List<String> authenticationNoRequired = List.of("/auth/login","/auth/signup");
-        return authenticationNoRequired.contains(uri);
+    boolean isAuthenticationNonRequired(HttpServletRequest request){
+        final var endpoint = request.getRequestURI()
+                                    .replaceAll(BASE_URL, "");
+        var authenticationNoRequired = List.of("/auth/login","/auth/signup");
+        return  authenticationNoRequired.contains(endpoint);
     }
 }
