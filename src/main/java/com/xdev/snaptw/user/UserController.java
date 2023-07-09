@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,8 +47,8 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<UserDTO> getUserInfo(){
-        final var userDTO = service.getCurrentUser();
+    public ResponseEntity<UserDTO> getUserInfo(@AuthenticationPrincipal User principal){
+        final var userDTO = service.getCurrentUser(principal);
         return ResponseEntity.ok(userDTO);
     }
 }

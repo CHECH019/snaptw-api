@@ -2,7 +2,6 @@ package com.xdev.snaptw.user;
 
 import java.util.List;
 
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.xdev.snaptw.exceptions.ResourceNotFoundException;
@@ -46,8 +45,7 @@ public class UserService{
                 ));
     }
 
-    public UserDTO getCurrentUser() {
-        final var user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    public UserDTO getCurrentUser(User user) {
         return new UserDTO(user);
     }
     

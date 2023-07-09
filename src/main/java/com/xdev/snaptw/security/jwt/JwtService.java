@@ -10,7 +10,8 @@ import java.util.function.Function;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import static com.xdev.snaptw.util.Const.TOKEN_VALIDITY;
+import static com.xdev.snaptw.util.Const.ACCESS_TOKEN_VALIDITY;
+import static com.xdev.snaptw.util.Const.REFRESH_TOKEN_VALIDITY;
 import static com.xdev.snaptw.util.Const.SIGNING_KEY;
 
 import io.jsonwebtoken.Claims;
@@ -61,22 +62,26 @@ public class JwtService {
                 .getBody();
     }
 
-    public String generateToken(UserDetails userDetails){
-        return generateToken(new HashMap<>(), userDetails);
+    public String generateAccessToken(UserDetails userDetails){
+        return generateToken(new HashMap<>(), userDetails, ACCESS_TOKEN_VALIDITY);
     }
 
-    public String generateToken(Map<String,Object> claims, UserDetails userDetails){
+    public String generateRefreshToken(UserDetails userDetails){
+        return generateToken(new HashMap<>(), userDetails, REFRESH_TOKEN_VALIDITY);
+    }
+
+    private String generateToken(Map<String,Object> claims, UserDetails userDetails,long validity){
         return Jwts
                 .builder()
                 .setClaims(claims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis()+TOKEN_VALIDITY))
+                .setExpiration(new Date(System.currentTimeMillis()+validity))
                 .signWith(signingKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    public Key signingKey(){
+    private Key signingKey(){
         byte[] keyBytes = Decoders.BASE64.decode(SIGNING_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
     }

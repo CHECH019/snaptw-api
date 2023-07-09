@@ -1,4 +1,4 @@
-package com.xdev.snaptw.apirequest;
+package com.xdev.snaptw.auth;
 
 import jakarta.validation.constraints.NotBlank;
 

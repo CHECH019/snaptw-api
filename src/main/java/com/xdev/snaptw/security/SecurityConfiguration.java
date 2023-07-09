@@ -8,8 +8,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -17,6 +19,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import com.xdev.snaptw.security.jwt.ExceptionHandlerFilter;
 import com.xdev.snaptw.security.jwt.JwtAuthenticationFilter;
 import static com.xdev.snaptw.util.Const.ENDPOINTS_WHITE_LIST;
+import static com.xdev.snaptw.util.Const.BASE_URL;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 import lombok.RequiredArgsConstructor;
@@ -30,6 +33,7 @@ public class SecurityConfiguration {
     private final AuthenticationProvider authenticationProvider;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final ExceptionHandlerFilter exceptionHandlerFilter;
+    private final LogoutService logoutService;
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
@@ -50,9 +54,15 @@ public class SecurityConfiguration {
                     UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(
                     exceptionHandlerFilter,
-                     JwtAuthenticationFilter.class);
+                     LogoutFilter.class)
+                .logout(logoutConfigurer -> logoutConfigurer
+                                            .addLogoutHandler(logoutService)
+                                            .logoutUrl(BASE_URL+"/auth/logout")
+                                            .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext()));
+                ;
         return httpSecurity.build();
     }
+
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();

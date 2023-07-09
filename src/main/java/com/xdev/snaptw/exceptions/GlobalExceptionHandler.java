@@ -51,6 +51,11 @@ public class GlobalExceptionHandler {
         return getResponse(HttpStatus.UNAUTHORIZED, e);
     }
 
+    @ExceptionHandler(InvalidTokenException.class)
+    public ResponseEntity<Response> invalidToken(InvalidTokenException e){
+        return getResponse(HttpStatus.UNAUTHORIZED, e);
+    }
+
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<Response> accessDenied(AccessDeniedException e){
         return getResponse(HttpStatus.UNAUTHORIZED, e);

@@ -1,14 +1,14 @@
 package com.xdev.snaptw.auth;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.xdev.snaptw.apirequest.AuthenticationRequest;
-import com.xdev.snaptw.apirequest.RegisterRequest;
 import com.xdev.snaptw.apiresponse.Response;
 import com.xdev.snaptw.apiresponse.TokenResponse;
 import static com.xdev.snaptw.util.Const.BASE_URL;
@@ -32,6 +32,12 @@ public class AuthenticationController {
     @PostMapping("/login")
     public ResponseEntity<TokenResponse> login(@RequestBody AuthenticationRequest request){
         var response = service.authenticate(request);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<TokenResponse> refresh(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorization){
+        var response = service.refresh(authorization);
         return ResponseEntity.ok(response);
     }
 }
